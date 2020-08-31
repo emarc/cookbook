@@ -11,19 +11,31 @@ const { serverSideRoutes } = new Flow({
 const routes: Route[] = [
   {
     path: "",
-    component: "main-view",
+    component: "all-recipes-view",
     action: async (_context, _commands) => {
-      await import("./views/main-view");
+      await import("./views/all-recipes-view");
+      // updateCurrentRecipe(_context.pathname);
+    },
+    // children: [
+    //   {
+    //     path: "",
+    //     component: "intro-view",
+    //     action: async () => {
+    //       await import("./views/intro-view");
+    //     },
+    //   },
+    //   ...tsRecipeRoutes,
+    //   ...serverSideRoutes, // IMPORTANT: this must be the last entry in the array
+    //],
+  },
+  {
+    path: "",
+    component: "single-recipe-view",
+    action: async (_context, _commands) => {
+      await import("./views/single-recipe-view");
       updateCurrentRecipe(_context.pathname);
     },
     children: [
-      {
-        path: "",
-        component: "intro-view",
-        action: async () => {
-          await import("./views/intro-view");
-        },
-      },
       ...tsRecipeRoutes,
       ...serverSideRoutes, // IMPORTANT: this must be the last entry in the array
     ],
@@ -42,8 +54,8 @@ export const updateCurrentRecipe = (path?: string) => {
     const tag = path.substr(path.lastIndexOf("/") + 1);
     const recipe = recipes.find((recipe) => recipe.url == tag);
     if (recipe) {
-      const mainView = document.querySelector("main-view")! as MainView;
-      mainView.recipe = recipe;
+      const singleRecipeView = document.querySelector("single-recipe-view")! as SingleRecipeView;
+      singleRecipeView.recipe = recipe;
     }
   }
 };
